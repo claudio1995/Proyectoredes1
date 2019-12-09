@@ -259,14 +259,9 @@ Building configuration...
 Router(config)#
 
 
-
-
-
-
 R2
 Router>enable
 Router#config t
-Enter configuration commands, one per line.  End with CNTL/Z.
 Router(config)#hostname R2
 R2(config)#no ip domain-lookup
 R2(config)#banner motd #Router protegido Edelberto#
@@ -281,3 +276,132 @@ R2(config-line)#login
 R2(config-line)#logging synchronous
 R2(config-line)#exit
 R2(config)#enable secret Redes1
+
+
+DIRECCIONAMIENTO DINAMICO CON RIP EN R1
+
+R1#config t
+Enter configuration commands, one per line.  End with CNTL/Z.
+R1(config)#router rip
+R1(config-router)#version 2
+R1(config-router)#network 10.0.0.0
+R1(config-router)#network 10.0.0.4
+R1(config-router)#network 10.0.0.8
+R1(config-router)#network 172.16.4.0
+R1(config-router)#no auto-summary
+R1(config-router)#default-information originate
+R1(config-router)#exit
+R1(config)#exit
+
+
+DIRECCIONAMIENTO DINAMICO CON RIP EN R2
+
+R2#config t
+Enter configuration commands, one per line.  End with CNTL/Z.
+R2(config)#router rip
+R2(config-router)#version 2
+R2(config-router)#network 10.0.0.0
+R2(config-router)#network 10.0.0.12
+R2(config-router)#network 10.0.0.20
+R2(config-router)#network 172.16.5.0
+R2(config-router)#no auto-summary
+R2(config-router)#default-information originate
+
+CONFIGURACIÓN DEL ROUTER 3
+
+Router#config t
+Router(config)#hostname R3
+R3(config)#no ip domain-lookup
+----------configuracion de RIPv2-----------
+R3(config)#router rip
+R3(config-router)#version 2
+R3(config-router)#no auto-summary
+R3(config-router)#network 10.0.0.22
+R3(config-router)#network 10.0.0.26
+R3(config-router)#network 10.0.0.30
+R3(config-router)#network 172.16.4.129
+R3(config-router)#default-information originate
+R3(config-router)#exit
+
+R3(config)#banner motd #EL INGRESO HA ESTE DISPOSITIVO NO ESTA PERMITIDO!!!!#
+R3(config)#line vty 0 4
+R3(config-line)#password Redes1
+R3(config-line)#login
+R3(config-line)#loggin synchronous
+R3(config-line)#exit
+
+R3(config)#line con 0
+R3(config-line)#password Redes1
+R3(config-line)#login
+R3(config-line)#loggin synchronous
+R3(config-line)#exit
+
+R3(config)#service password-encryption
+R3(config)#enable secret Redes1
+
+**************CONFIGURACIÓN DEL ROUTER 4******************
+
+Router>enable
+Router#config t
+Router(config)#hostname R4
+R4(config)#banner motd #EL ACCESO HA ESTE EQUIPO, NO ESTA PERMITIDO#
+R4(config)#no ip domain-lookup
+
+R4(config)#router rip 
+R4(config-router)#version 2
+R4(config-router)#no auto-summary
+R4(config-router)#network 10.0.0.8
+R4(config-router)#network 10.0.0.16
+R4(config-router)#network 10.0.0.28	
+R4(config-router)#network 172.16.0.0
+R4(config-router)#default-information originate
+R4(config-router)#exit
+
+R4(config)#line vty 0 4
+R4(config-line)#password Redes1
+R4(config-line)#login
+R4(config-line)#logging synchronous
+R4(config-line)#exit
+
+R4(config)#line con 0
+R4(config-line)#password Redes1
+R4(config-line)#login
+R4(config-line)#logging synchronous
+R4(config-line)#exit
+
+R4(config)#enable secret Redes1 
+R4(config)#service password-encryption
+
+
+**************CONFIGURACIÓN DEL ROUTER 5******************
+Router>enable
+Router#config t
+Router(config)#no ip domain-lookup
+Router(config)#hostname R5
+R5(config)#enable secret Redes1
+
+R5(config)#line vty 0 4 
+R5(config-line)#password Redes1
+R5(config-line)#login
+R5(config-line)#logging synchronous
+R5(config-line)#exit
+
+R5(config)#lin con 0
+R5(config-line)#password Redes1
+R5(config-line)#login
+R5(config-line)#logging synchronous
+R5(config-line)#exit
+
+R5(config)#banner motd #EL ACCESO HA ESTE DISPOSITIVO ESTA RESTRINGIDO!#
+R5(config)#service password-encryption 
+
+
+R5(config)#router rip
+R5(config-router)#version 2
+R5(config-router)#no auto-summary
+R5(config-router)#network 10.0.0.4
+R5(config-router)#network 10.0.0.12
+R5(config-router)#network 10.0.0.16
+R5(config-router)#network 10.0.0.24
+R5(config-router)#default-information originate
+R5(config-router)#exit
