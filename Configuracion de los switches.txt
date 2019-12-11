@@ -1,0 +1,47 @@
+Switch>ena
+Switch#confi t
+
+Switch(config)#hostname S1R1
+S1R1(config)#banner motd #El acceso a este dispositivo esta restringido!#
+
+S1R1(config)#line vty 0 15
+S1R1(config-line)#password Redes1
+S1R1(config-line)#login
+S1R1(config-line)#loggin synchronous
+S1R1(config-line)#exit
+
+S1R1(config)#line con 0
+S1R1(config-line)#password Redes1
+S1R1(config-line)#login
+S1R1(config-line)#loggin synchronous
+S1R1(config-line)#exit
+
+S1R1(config)#enable secret Redes1
+S1R1(config)#service password-encryption
+S1R1(config)#no ip domain-lookup
+S1R1(config)#do wr
+Building configuration...
+[OK]
+
+S1R1(config)#int vlan 1
+S1R1(config-if)#ip address 172.16.4.2 255.255.255.128
+S1R1(config-if)#no shut
+S1R1(config-if)#exit
+
+S1R1(config)#ip default-gateway 172.16.4.1
+
+
+S1R1(config)#ip domain-name Redes1.com
+S1R1(config)#username Redes1 privilege 15 secret Redes1
+S1R1(config)#line vty 0 15
+S1R1(config-line)#transport input ssh
+S1R1(config-line)#login local
+S1R1(config-line)#exit
+	
+S1R1(config)#crypto key generate rsa
+
+
+luego escribir 1024
+
+S1R1(config)#ip ssh version 2
+*mar. 1 0:41:37.378: %SSH-5-ENABLED: SSH 2 has been enabled
